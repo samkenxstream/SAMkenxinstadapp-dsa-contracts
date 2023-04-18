@@ -54,6 +54,8 @@ function getNetworkUrl(networkType: string) {
     return `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_ID}`;
   else if (networkType === "arbitrum")
     return `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_ID}`;
+  else if (networkType === "kovan")
+    return `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_ID}`;
   else return `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_ID}`;
 }
 const INSTA_MASTER = "0xb1DC62EC38E6E3857a887210C38418E4A17Da5B2";
@@ -61,6 +63,11 @@ const INSTA_MASTER = "0xb1DC62EC38E6E3857a887210C38418E4A17Da5B2";
 // ================================= CONFIG =========================================
 const config = {
   defaultNetwork: "hardhat",
+  gasReporter: {
+    enabled: true,
+    currency: "ETH",
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY
+  },
   tenderly: {
     project: "team-development",
     username: "InstaDApp",
@@ -70,16 +77,13 @@ const config = {
     hardhat: {
       forking: {
         url: String(getNetworkUrl(String(process.env.networkType))),
-        // blockNumber: 11739260,
-        blockNumber: 12068005,
+        // blockNumber: 11739260,`
+        blockNumber: 15010000,
       },
       blockGasLimit: 12000000,
       masterAddress: INSTA_MASTER,
     },
-    kovan: {
-      url: `https://eth-kovan.alchemyapi.io/v2/${ALCHEMY_ID}`,
-      accounts: [`0x${PRIVATE_KEY}`],
-    },
+    kovan: createConfig("kovan"),
     mainnet: createConfig("mainnet"),
     matic: createConfig("polygon"),
     avax: createConfig("avalanche"),
